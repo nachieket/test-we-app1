@@ -10,14 +10,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-- job: Checkout
+- job: CRWD
   steps:
     - script: git clone 'https://github.com/javahometech/my-app'
-- job: Build_Maven_Package
-  steps:
     - script: mvn clean package
-- job:
-  steps:
     - script: sudo apt-get update
     - script: sudo apt-get install ca-certificates curl gnupg lsb-release
     - script: sudo mkdir -p /etc/apt/keyrings
@@ -25,7 +21,5 @@ jobs:
     - script: echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     - script: sudo apt-get update
     - script: sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-- job: Build_Docker_Image
-  steps:
     - script: docker build -t crwd:0.0.1 .
     - script: docker tag crwd:0.0.1 517716713836.dkr.ecr.eu-west-2.amazonaws.com/njecr:latest
