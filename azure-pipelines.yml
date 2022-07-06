@@ -35,6 +35,6 @@ jobs:
         python3 container-image-scan/cs_scanimage.py -r crwd -t 0.0.1
       displayName: 'Scan container-image'
     - script: |
-        docker login -u nachiketj -p B@rc3l0na!0
+        docker login -u nachiketj -p 'B@rc3l0na!0'
         docker push nachiketj/crwd:0.0.1
       displayName: 'Push container image'
