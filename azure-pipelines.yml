@@ -9,29 +9,14 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml' 
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: myweb'
-  inputs:
-    targetPath: '$(Pipeline.Workspace)' 
-    artifactName: "myweb.war"
-  condition: succeeded()
-
-- task: DownloadPipelineArtifact@2
-  inputs:
-    buildType: current
-    artifact: 'myweb.war'
-
-
+jobs:
+- job: Checkout
+  steps:
+    - script: git clone 'https://github.com/javahometech/my-app'
+- job: Build_Maven_Package
+  steps:
+    - script: mvn clean package
+- job: Build_Docker_Image
+  steps:
+    - script: sh 'docker build -t crwd:0.0.1 .'
+    - script: sh 'docker tag crwd:0.0.1 517716713836.dkr.ecr.eu-west-2.amazonaws.com/njecr:latest'
