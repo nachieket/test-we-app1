@@ -23,3 +23,6 @@ jobs:
     - script: sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
     - script: docker build -t crwd:0.0.1 .
     - script: docker tag crwd:0.0.1 517716713836.dkr.ecr.eu-west-2.amazonaws.com/njecr:latest
+    - script: git clone https://github.com/crowdstrike/container-image-scan
+    - script: pip3 install docker
+    - script: python3 container-image-scan/cs_scanimage.py -r crwd -t 0.0.1
