@@ -9,20 +9,39 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+- group: cs_falcon_vars
+- name: CONTAINER_TAG
+  value: 0.0.1
+- name: FALCON_CLOUD_REGION
+  value: 'us-1'
+#- name: SCORE
+#  value: 500
+
 jobs:
 - job: CRWD
   steps:
-    - script: git clone 'https://github.com/javahometech/my-app'
-    - script: mvn clean package
-    - script: sudo apt-get update
-    - script: sudo apt-get install ca-certificates curl gnupg lsb-release
-    - script: sudo mkdir -p /etc/apt/keyrings
-    - script: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-    - script: echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    - script: sudo apt-get update
-    - script: sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-    - script: docker build -t crwd:0.0.1 .
-    - script: docker tag crwd:0.0.1 517716713836.dkr.ecr.eu-west-2.amazonaws.com/njecr:latest
-    - script: git clone https://github.com/crowdstrike/container-image-scan
-    - script: pip3 install docker
-    - script: python3 container-image-scan/cs_scanimage.py -r crwd -t 0.0.1
+    - script: |
+        git clone 'https://github.com/javahometech/my-app'
+        mvn clean package
+        sudo apt-get update
+        sudo apt-get install ca-certificates curl gnupg lsb-release
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+        docker build -t crwd:0.0.1 .
+        docker tag crwd:0.0.1 517716713836.dkr.ecr.eu-west-2.amazonaws.com/njecr:latest
+    - script: |
+        export FALCON_CLIENT_SECRET='YsiUyuhcok8K0B9Q7xMtOp6XZzr423vL5jfaP1mq'
+        export FALCON_CLIENT_ID='d89c2e3447db412b8de82493f40dd45c'
+        pip3 install docker
+        if [ ! -d container-image-scan ] ; then
+          git clone https://github.com/crowdstrike/container-image-scan
+        fi
+        python3 container-image-scan/cs_scanimage.py
+      displayName: 'Scan container-image'
+    - script: |
+        docker push nachiketj/crwd:0.0.1
+      displayName: 'Push container image'
