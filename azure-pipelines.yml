@@ -23,7 +23,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
         docker build -t crwd:0.0.1 .
-        docker tag crwd:0.0.1 517716713836.dkr.ecr.eu-west-2.amazonaws.com/njecr:latest
+        docker tag crwd:0.0.1 nachiketj/crwd:0.0.1
     - script: |
         export FALCON_CLIENT_SECRET='YsiUyuhcok8K0B9Q7xMtOp6XZzr423vL5jfaP1mq'
         export FALCON_CLIENT_ID='d89c2e3447db412b8de82493f40dd45c'
@@ -35,5 +35,6 @@ jobs:
         python3 container-image-scan/cs_scanimage.py -r crwd -t 0.0.1
       displayName: 'Scan container-image'
     - script: |
+        docker login -u nachiketj -p B@rc3l0na!0
         docker push nachiketj/crwd:0.0.1
       displayName: 'Push container image'
