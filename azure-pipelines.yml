@@ -32,7 +32,7 @@ jobs:
         if [ ! -d container-image-scan ] ; then
           git clone https://github.com/crowdstrike/container-image-scan
         fi
-        python3 container-image-scan/cs_scanimage.py
+        python3 container-image-scan/cs_scanimage.py -r crwd -t 0.0.1
       displayName: 'Scan container-image'
     - script: |
         docker push nachiketj/crwd:0.0.1
