@@ -10,13 +10,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-- group: cs_falcon_vars
-- name: CONTAINER_TAG
-  value: 0.0.1
-- name: FALCON_CLOUD_REGION
-  value: 'us-1'
-#- name: SCORE
-#  value: 500
+  - group: cs_falcon_vars
+  - name: CONTAINER_TAG
+    value: 0.0.1
+  - name: FALCON_CLOUD_REGION
+    value: 'us-1'
+  #- name: SCORE
+  #  value: 500
 
 jobs:
 - job: CRWD
