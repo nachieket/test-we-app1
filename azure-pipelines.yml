@@ -35,7 +35,7 @@ jobs:
         if [ ! -d container-image-scan ] ; then
           git clone https://github.com/crowdstrike/container-image-scan
         fi
-        python3 container-image-scan/cs_scanimage.py -r some_image -t 0.0.1
+        python3 container-image-scan/cs_scanimage.py -r some_image -t '0.0.1'
       displayName: 'Scan Container Image'
     - script: |
         docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
