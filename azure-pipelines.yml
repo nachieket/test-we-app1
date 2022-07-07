@@ -10,44 +10,35 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-- job: CRWD
+- job: test_build
   steps:
     - script: |
-        echo $CLIENT_ID
-        echo $CLIENT_SECRET
-        echo $(CLIENT_ID)
-        echo $(CLIENT_SECRET)
-    # - script: |
-    #     git clone 'https://github.com/javahometech/my-app'
-    #     mvn clean package
-    #     sudo apt-get update
-    #     sudo apt-get install ca-certificates curl gnupg lsb-release
-    #     sudo mkdir -p /etc/apt/keyrings
-    #     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-    #     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    #     sudo apt-get update
-    #     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-    #     docker build -t crwd:0.0.1 .
-    #     docker tag crwd:0.0.1 $DOCKER_USER/crwd:0.0.1
-    # - script: |
-    #     echo $CLIENT_ID
-    #     echo $CLIENT_SECRET
-    #     echo $(CLIENT_ID)
-    #     echo $(CLIENT_SECRET)
-        
-    #     export FALCON_CLIENT_SECRET=$CLIENT_ID
-    #     export FALCON_CLIENT_ID=$CLIENT_SECRET
-    #     echo $FALCON_CLIENT_SECRET
-    #     echo $FALCON_CLIENT_ID
+        git clone 'https://github.com/javahometech/my-app'
+        mvn clean package
+      displayName: 'Git Clone and MVN Build'
+    - script: |
+        sudo apt-get update
+        sudo apt-get install ca-certificates curl gnupg lsb-release
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+        docker build -t some_image:0.0.1 .
+        docker tag crwd:0.0.1 $(DOCKER_USER)/some_image:0.0.1
+      displayName: 'Docker Install, Build and Tag Image'
+    - script: |        
+        export FALCON_CLIENT_SECRET=$(CLIENT_ID)
+        export FALCON_CLIENT_ID=$(CLIENT_SECRET)
 
-    #     export FALCON_CLOUD_REGION='us-1'
-    #     pip3 install docker
-    #     if [ ! -d container-image-scan ] ; then
-    #       git clone https://github.com/crowdstrike/container-image-scan
-    #     fi
-    #     python3 container-image-scan/cs_scanimage.py -r crwd -t 0.0.1
-    #   displayName: 'Scan container-image'
-    # - script: |
-    #     docker login -u $DOCKER_USER -p $DOCKER_PASS
-    #     docker push $DOCKER_USER/crwd:0.0.1
-    #   displayName: 'Push container image'
+        export FALCON_CLOUD_REGION='us-1'
+        pip3 install docker
+        if [ ! -d container-image-scan ] ; then
+          git clone https://github.com/crowdstrike/container-image-scan
+        fi
+        python3 container-image-scan/cs_scanimage.py -r some_image -t 0.0.1
+      displayName: 'Scan Container Image'
+    - script: |
+        docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
+        docker push $(DOCKER_USER)/some_image:0.0.1
+      displayName: 'Push container image'
