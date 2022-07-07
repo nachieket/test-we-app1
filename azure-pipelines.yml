@@ -28,8 +28,8 @@ jobs:
         docker tag some_image:0.0.1 $(DOCKER_USER)/some_image:0.0.1
       displayName: 'Docker Install, Build and Tag Image'
     - script: |        
-        export FALCON_CLIENT_SECRET='d89c2e3447db412b8de82493f40dd45c'
-        export FALCON_CLIENT_ID='Itc9hUe7OPfQ46wCu3Jb0yB8Tgkqr2VYWjap1Z5D'
+        export FALCON_CLIENT_SECRET=$(CLIENT_ID)
+        export FALCON_CLIENT_ID=$(CLIENT_SECRET)
 
         export FALCON_CLOUD_REGION='us-1'
         pip3 install docker
