@@ -31,7 +31,9 @@ jobs:
         export FALCON_CLIENT_SECRET=$(CLIENT_ID)
         export FALCON_CLIENT_ID=$(CLIENT_SECRET)
         export FALCON_CLOUD_REGION='us-1'
-        pip3 install docker-py
+        pip3 uninstall docker-py
+        pip3 uninstall docker
+        pip3 install docker
         if [ ! -d container-image-scan ] ; then
           git clone https://github.com/crowdstrike/container-image-scan
         fi
