@@ -28,8 +28,8 @@ jobs:
         docker tag some_image:latest $(DOCKER_USER)/some_image:latest
       displayName: 'Docker Install, Build and Tag Image'
     - script: |        
-        export FALCON_CLIENT_SECRET='GfxHFmp3O2Lco56QKS0rYlED9Ivt8dy17MTzNku4'
-        export FALCON_CLIENT_ID='94d59b8a5dbe4661b77ea6922b01c301'
+        export FALCON_CLIENT_ID=$(CLIENT_ID)
+        export FALCON_CLIENT_SECRET=$(CLIENT_SECRET)
         export FALCON_CLOUD_REGION='us-1'
         pip3 install docker
         if [ ! -d container-image-scan ] ; then
