@@ -23,10 +23,10 @@ jobs:
         sudo apt-get update
         sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
         docker build -t crwd:0.0.1 .
-        docker tag crwd:0.0.1 nachiketj/crwd:0.0.1
+        docker tag crwd:0.0.1 $(DOCKER_USER)/crwd:0.0.1
     - script: |
-        export FALCON_CLIENT_SECRET='<id>'
-        export FALCON_CLIENT_ID='<id>'
+        export FALCON_CLIENT_SECRET=$(CLIENT_ID)
+        export FALCON_CLIENT_ID=$(CLIENT_SECRET)
         export FALCON_CLOUD_REGION='us-1'
         pip3 install docker
         if [ ! -d container-image-scan ] ; then
@@ -35,6 +35,6 @@ jobs:
         python3 container-image-scan/cs_scanimage.py -r crwd -t 0.0.1
       displayName: 'Scan container-image'
     - script: |
-        docker login -u nachiketj -p 'xyz'
-        docker push nachiketj/crwd:0.0.1
+        docker login -u $(DOCKER_USER) -p $(DOCKER_PASS)
+        docker push $(DOCKER_USER)/crwd:0.0.1
       displayName: 'Push container image'
