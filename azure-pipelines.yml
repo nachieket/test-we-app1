@@ -28,11 +28,9 @@ jobs:
         docker tag some_image:latest $(DOCKER_USER)/some_image:latest
       displayName: 'Docker Install, Build and Tag Image'
     - script: |        
-        export FALCON_CLIENT_SECRET=$(CLIENT_ID)
-        export FALCON_CLIENT_ID=$(CLIENT_SECRET)
+        export FALCON_CLIENT_SECRET=94d59b8a5dbe4661b77ea6922b01c301
+        export FALCON_CLIENT_ID=GfxHFmp3O2Lco56QKS0rYlED9Ivt8dy17MTzNku4
         export FALCON_CLOUD_REGION='us-1'
-        pip3 uninstall docker-py
-        pip3 uninstall docker
         pip3 install docker
         if [ ! -d container-image-scan ] ; then
           git clone https://github.com/crowdstrike/container-image-scan
