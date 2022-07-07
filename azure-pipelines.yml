@@ -36,6 +36,11 @@ jobs:
           git clone https://github.com/crowdstrike/container-image-scan
         fi
         python3 container-image-scan/cs_scanimage.py -r some_image -t latest --json-report report.json
+        echo ''
+        echo '#########################'
+        echo '###### SCAN REPORT ######'
+        echo '#########################'
+        echo ''
         cat report.json
       displayName: 'Scan Container Image'
     - script: |
